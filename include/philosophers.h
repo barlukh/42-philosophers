@@ -6,13 +6,48 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/06/30 14:54:29 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/02 17:27:36 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
+//------------------------------------------------------------------------------
+// Library Headers
+//------------------------------------------------------------------------------
 
+#include <stdlib.h>
+#include <stdio.h>
+
+//------------------------------------------------------------------------------
+// Macro Definitions
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+// Type Definitions
+//------------------------------------------------------------------------------
+
+typedef struct s_data
+{
+	int	*philo;
+	int	tt_die;
+	int	tt_eat;
+	int	tt_sleep;
+	int	must_eat;
+}	t_data;
+
+//------------------------------------------------------------------------------
+// Function Prototypes
+//------------------------------------------------------------------------------
+
+/**
+ * @brief Parses arguments from the command line.
+ * @param argc Argument count.
+ * @param argv Argument vector.
+ * @return EXIT_SUCCESS or EXIT_FAILURE.
+ */
+int	parse_arguments(int argc, char **argv);
 
 #endif
