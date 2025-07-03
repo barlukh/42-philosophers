@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/03 11:12:37 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/03 13:21:05 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	parse_arguments(int argc, char **argv, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
+// Checks argument count.
 static int	check_argc(int argc)
 {
 	if (argc != 5 && argc != 6)
@@ -32,10 +33,11 @@ static int	check_argc(int argc)
 	return (EXIT_SUCCESS);
 }
 
+// Converts arguments in argv into integers.
 static int	convert_argv(int argc, char **argv, t_data *data)
 {
-	data->philos = ft_atoi(argv[1]);
-	if (data->philos < 1)
+	data->philos_count = ft_atoi(argv[1]);
+	if (data->philos_count < 1)
 		return (EXIT_FAILURE);
 	data->tt_die = ft_atoi(argv[2]);
 	if (data->tt_die < 1)
@@ -57,10 +59,11 @@ static int	convert_argv(int argc, char **argv, t_data *data)
 	return (EXIT_SUCCESS);
 }
 
+// Converts a string into an integer.
 static int	ft_atoi(const char *s)
 {
-	int		result;
-	size_t	i;
+	long long	result;
+	size_t		i;
 
 	result = 0;
 	i = 0;
@@ -73,7 +76,9 @@ static int	ft_atoi(const char *s)
 	while (s[i] != '\0' && (s[i] >= '0' && s[i] <= '9'))
 	{
 		result = result * 10 + (s[i] - '0');
+		if (result > INT_MAX)
+			return (ERROR);
 		i++;
 	}
-	return (result);
+	return ((int)result);
 }
