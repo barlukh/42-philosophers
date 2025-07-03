@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/03 13:21:05 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/03 13:57:40 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ static int	check_argc(int argc)
 // Converts arguments in argv into integers.
 static int	convert_argv(int argc, char **argv, t_data *data)
 {
-	data->philos_count = ft_atoi(argv[1]);
-	if (data->philos_count < 1)
+	data->philo_count = ft_atoi(argv[1]);
+	if (data->philo_count < 1)
 		return (EXIT_FAILURE);
 	data->tt_die = ft_atoi(argv[2]);
 	if (data->tt_die < 1)
