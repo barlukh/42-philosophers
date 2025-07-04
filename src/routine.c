@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 14:53:57 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/04 15:43:08 by bgazur           ###   ########.fr       */
+/*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
+/*   Updated: 2025/07/04 17:45:35 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-int	main(int argc, char **argv)
+void	*philo_routine(void *arg)
 {
-	t_data	data;
+	t_data	*data;
 
-	if (parse_arguments(argc, argv, &data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (philo_init(&data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	return (philo_end(&data));
+	data = arg;
+	printf("Routine i = %zd\n", data->err_flag);
+	return (EXIT_SUCCESS);
 }

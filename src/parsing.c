@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/04 13:43:33 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/04 16:36:24 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	parse_arguments(int argc, char **argv, t_data *data)
 		printf("Invalid arguments\n");
 		return (EXIT_FAILURE);
 	}
-	else if (convert_argv(argc, argv, data) == EXIT_FAILURE)
+	if (convert_argv(argc, argv, data) == EXIT_FAILURE)
 	{
 		printf("Invalid arguments\n");
 		return (EXIT_FAILURE);
@@ -42,26 +42,26 @@ static int	check_argc(int argc)
 // Converts arguments in argv into integers.
 static int	convert_argv(int argc, char **argv, t_data *data)
 {
-	data->philo_count = ft_atoi(argv[1]);
-	if (data->philo_count == ERROR)
+	data->philo.count = ft_atoi(argv[1]);
+	if (data->philo.count == ERROR)
 		return (EXIT_FAILURE);
-	data->tt_die = ft_atoi(argv[2]);
-	if (data->tt_die == ERROR)
+	data->philo.tt_die = ft_atoi(argv[2]);
+	if (data->philo.tt_die == ERROR)
 		return (EXIT_FAILURE);
-	data->tt_eat = ft_atoi(argv[3]);
-	if (data->tt_eat == ERROR)
+	data->philo.tt_eat = ft_atoi(argv[3]);
+	if (data->philo.tt_eat == ERROR)
 		return (EXIT_FAILURE);
-	data->tt_sleep = ft_atoi(argv[4]);
-	if (data->tt_sleep == ERROR)
+	data->philo.tt_sleep = ft_atoi(argv[4]);
+	if (data->philo.tt_sleep == ERROR)
 		return (EXIT_FAILURE);
 	if (argc == 6)
 	{
-		data->must_eat = ft_atoi(argv[5]);
-		if (data->must_eat == ERROR)
+		data->philo.must_eat = ft_atoi(argv[5]);
+		if (data->philo.must_eat == ERROR)
 			return (EXIT_FAILURE);
 	}
 	else
-		data->must_eat = NOT_SET;
+		data->philo.must_eat = NOT_SET;
 	return (EXIT_SUCCESS);
 }
 

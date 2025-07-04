@@ -6,7 +6,7 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/30 14:51:29 by bgazur            #+#    #+#              #
-#    Updated: 2025/07/03 11:00:15 by bgazur           ###   ########.fr        #
+#    Updated: 2025/07/03 13:50:05 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,8 +23,10 @@ HDR =		$(INC_DIR)/philosophers.h
 
 OBJ =		$(SRC:%.c=$(OBJ_DIR)/%.o)
 
-SRC =		main.c \
-			parsing.c
+SRC =		lifecycle.c \
+			main.c \
+			parsing.c \
+			routine.c
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
