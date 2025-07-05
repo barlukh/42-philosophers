@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/05 13:55:55 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/05 14:49:03 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	philo_init(t_data *data)
 		if (pthread_create(&data->philo.arr[i], NULL,
 				philo_routine, data) != EXIT_SUCCESS)
 		{
-			printf("Error creating thread (index %lu)\n", data->philo.arr[i]);
+			printf("Error creating thread (index %zu)\n", i);
 			data->philos_created = i;
 			return (EXIT_FAILURE);
 		}
@@ -53,7 +53,7 @@ int	philo_end(t_data *data)
 	{
 		if (pthread_join(data->philo.arr[i], NULL) != EXIT_SUCCESS)
 		{
-			printf("Error joining thread (index %lu)\n", data->philo.arr[i]);
+			printf("Error joining thread (index %zu)\n", i);
 			data->flag_error = ERROR;
 		}
 		i++;
