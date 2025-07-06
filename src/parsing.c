@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 11:45:07 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 16:08:47 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,26 +42,26 @@ static int	check_argc(int argc)
 // Converts arguments in argv into integers.
 static int	convert_argv(int argc, char **argv, t_data *data)
 {
-	data->philo.count = ft_atoi(argv[1]);
-	if (data->philo.count == ERROR)
+	data->philos_count = ft_atoi(argv[1]);
+	if (data->philos_count == ERROR)
 		return (FAILURE);
-	data->philo.tt_die = ft_atoi(argv[2]);
-	if (data->philo.tt_die == ERROR)
+	data->tt_die = ft_atoi(argv[2]);
+	if (data->tt_die == ERROR)
 		return (FAILURE);
-	data->philo.tt_eat = ft_atoi(argv[3]);
-	if (data->philo.tt_eat == ERROR)
+	data->tt_eat = ft_atoi(argv[3]);
+	if (data->tt_eat == ERROR)
 		return (FAILURE);
-	data->philo.tt_sleep = ft_atoi(argv[4]);
-	if (data->philo.tt_sleep == ERROR)
+	data->tt_sleep = ft_atoi(argv[4]);
+	if (data->tt_sleep == ERROR)
 		return (FAILURE);
 	if (argc == 6)
 	{
-		data->philo.must_eat = ft_atoi(argv[5]);
-		if (data->philo.must_eat == ERROR)
+		data->must_eat = ft_atoi(argv[5]);
+		if (data->must_eat == ERROR)
 			return (FAILURE);
 	}
 	else
-		data->philo.must_eat = NOT_SET;
+		data->must_eat = NOT_SET;
 	return (SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 12:47:20 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 16:35:10 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	*philo_routine(void *arg)
 		if (data->flag_error == NO_ERROR)
 			break ;
 	}
-	pthread_mutex_lock(&(data->general));
-	printf("Routine %ld\n", get_timestamp(data));
-	pthread_mutex_unlock(&(data->general));
+	pthread_mutex_lock(&(data->mtx_general));
+	printf("Routine %ld: %zu\n", get_timestamp(data), data->philos->id);
+	pthread_mutex_unlock(&(data->mtx_general));
 	return (NULL);
 }

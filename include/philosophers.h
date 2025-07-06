@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 12:46:13 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 16:25:40 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,43 +47,49 @@
 //------------------------------------------------------------------------------
 
 /**
- * @brief Atttributes of philosophers and their routine.
- * @param count Number of philosophers.
- * @param tt_die Time to die.
- * @param tt_eat Time to eat.
- * @param tt_sleep Time to sleep.
- * @param must_eat Number of times each philosopher must eat, -1 if not set.
- * @param arr Array of philosophers.
+ * @brief Unique attributes of each philosopher.
+ * @param id Identification number of a philosopher.
+ * @param philo_thread Thread identifier.
+ * @param fork_left Mutex object of the left fork.
+ * @param fork_right Mutex object of the right fork.
  */
 typedef struct s_philo
 {
-	int			count;
-	int			tt_die;
-	int			tt_eat;
-	int			tt_sleep;
-	int			must_eat;
-	pthread_t	*arr;
+	size_t			id;
+	pthread_t		philo_thread;
+	pthread_mutex_t	fork_left;
+	pthread_mutex_t	fork_right;
 }	t_philo;
 
 /**
  * @brief Data used by the program.
  * @param flag_error Flag singaling an error.
- * @param forks_created Number of succesfully created forks.
- * @param philos_created Number of succesfully created philosophers.
+ * @param philos_count Number of philosophers.
+ * @param tt_die Time to die.
+ * @param tt_eat Time to eat.
+ * @param tt_sleep Time to sleep.
+ * @param must_eat Number of times each philosopher must eat, -1 if not set.
+ * @param forks_created Number of successfully created forks.
+ * @param philos_created Number of successfully created philosophers.
  * @param time_start Starting timestamp.
- * @param general General purpose mutex object.
- * @param fork Array of fork mutex objects.
- * @param philo Atttributes of philosophers and their routine.
+ * @param mtx_general General purpose mutex object.
+ * @param mtx_forks Array of fork mutex objects.
+ * @param philos Array of philosophers and their attributes.
  */
 typedef struct s_data
 {
 	_Atomic int		flag_error;
+	int				philos_count;
+	int				tt_die;
+	int				tt_eat;
+	int				tt_sleep;
+	int				must_eat;
 	size_t			forks_created;
 	size_t			philos_created;
 	uint64_t		time_start;
-	pthread_mutex_t	general;
-	pthread_mutex_t	*fork;
-	t_philo			philo;
+	pthread_mutex_t	mtx_general;
+	pthread_mutex_t	*mtx_forks;
+	t_philo			*philos;
 }	t_data;
 
 //------------------------------------------------------------------------------
@@ -124,7 +130,7 @@ int			mem_alloc(t_data *data);
  * @param data Data used by the program.
  * @return SUCCESS or FAILURE.
  */
-int			fork_init(t_data *data);
+int			forks_init(t_data *data);
 
 /**
  * @brief Parses arguments from the command line.
@@ -140,14 +146,14 @@ int			parse_arguments(int argc, char **argv, t_data *data);
  * @param data Data used by the program.
  * @return None.
  */
-void		philo_end(t_data *data);
+void		philos_end(t_data *data);
 
 /**
  * @brief Creates all philosophers.
  * @param data Data used by the program.
  * @return None.
  */
-void		philo_init(t_data *data);
+void		philos_init(t_data *data);
 
 /**
  * @brief Runs each philosopher's routine.
