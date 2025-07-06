@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 12:24:50 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 12:46:13 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,18 @@ typedef struct s_data
 void		cleanup(t_data *data, int flag_clean);
 
 /**
- * @brief Gets the current timestamp.
+ * @brief Gets the current time.
  * @param void None.
- * @return Current timestamp.
+ * @return Current time.
  */
 uint64_t	get_time(void);
+
+/**
+ * @brief Gets the current timestamp.
+ * @param data Data used by the program.
+ * @return Current timestamp.
+ */
+uint64_t	get_timestamp(t_data *data);
 
 /**
  * @brief Allocates memory for all philosophers and forks.
