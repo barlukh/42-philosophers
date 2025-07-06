@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/04 16:36:24 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 11:45:07 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,25 @@ static int	ft_atoi(const char *s);
 
 int	parse_arguments(int argc, char **argv, t_data *data)
 {
-	if (check_argc(argc) == EXIT_FAILURE)
+	if (check_argc(argc) != SUCCESS)
 	{
 		printf("Invalid arguments\n");
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	}
-	if (convert_argv(argc, argv, data) == EXIT_FAILURE)
+	if (convert_argv(argc, argv, data) != SUCCESS)
 	{
 		printf("Invalid arguments\n");
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 // Checks argument count.
 static int	check_argc(int argc)
 {
 	if (argc != 5 && argc != 6)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 // Converts arguments in argv into integers.
@@ -44,25 +44,25 @@ static int	convert_argv(int argc, char **argv, t_data *data)
 {
 	data->philo.count = ft_atoi(argv[1]);
 	if (data->philo.count == ERROR)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	data->philo.tt_die = ft_atoi(argv[2]);
 	if (data->philo.tt_die == ERROR)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	data->philo.tt_eat = ft_atoi(argv[3]);
 	if (data->philo.tt_eat == ERROR)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	data->philo.tt_sleep = ft_atoi(argv[4]);
 	if (data->philo.tt_sleep == ERROR)
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	if (argc == 6)
 	{
 		data->philo.must_eat = ft_atoi(argv[5]);
 		if (data->philo.must_eat == ERROR)
-			return (EXIT_FAILURE);
+			return (FAILURE);
 	}
 	else
 		data->philo.must_eat = NOT_SET;
-	return (EXIT_SUCCESS);
+	return (SUCCESS);
 }
 
 // Converts a string into an integer.

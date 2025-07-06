@@ -6,24 +6,57 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/05 14:49:03 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 12:34:55 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-int	philo_alloc(t_data *data)
+int	mem_alloc(t_data *data)
 {
 	data->philo.arr = malloc(sizeof(pthread_t) * data->philo.count);
 	if (!data->philo.arr)
 	{
 		printf("Error allocating memory\n");
-		return (EXIT_FAILURE);
+		return (FAILURE);
 	}
-	return (EXIT_SUCCESS);
+	data->fork = malloc(sizeof(pthread_mutex_t) * data->philo.count);
+	if (!data->fork)
+	{
+		cleanup(data, C1);
+		printf("Error allocating memory\n");
+		return (FAILURE);
+	}
+	return (SUCCESS);
 }
 
-int	philo_init(t_data *data)
+int	fork_init(t_data *data)
+{
+	size_t	i;
+
+	if (pthread_mutex_init(&(data->general), NULL) != SUCCESS)
+	{
+		cleanup(data, C2);
+		printf("Error initializing mutex objects\n");
+		return (FAILURE);
+	}
+	i = 0;
+	while (i < (size_t)data->philo.count)
+	{
+		if (pthread_mutex_init(&(data->fork[i]), NULL) != SUCCESS)
+		{
+			data->forks_created = i;
+			cleanup(data, C3);
+			printf("Error initializing mutex objects\n");
+			return (FAILURE);
+		}
+		i++;
+	}
+	data->forks_created = i;
+	return (SUCCESS);
+}
+
+void	philo_init(t_data *data)
 {
 	size_t	i;
 
@@ -32,36 +65,33 @@ int	philo_init(t_data *data)
 	while (i < (size_t)data->philo.count)
 	{
 		if (pthread_create(&data->philo.arr[i], NULL,
-				philo_routine, data) != EXIT_SUCCESS)
+				philo_routine, data) != SUCCESS)
 		{
-			printf("Error creating thread (index %zu)\n", i);
 			data->philos_created = i;
-			return (EXIT_FAILURE);
+			data->flag_error = ERROR;
+			printf("Error creating threads\n");
+			return ;
 		}
 		i++;
 	}
 	data->philos_created = i;
-	return (EXIT_SUCCESS);
+	data->time_start = get_time();
+	data->flag_error = NO_ERROR;
 }
 
-int	philo_end(t_data *data)
+void	philo_end(t_data *data)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < data->philos_created)
 	{
-		if (pthread_join(data->philo.arr[i], NULL) != EXIT_SUCCESS)
+		if (pthread_join(data->philo.arr[i], NULL) != SUCCESS)
 		{
-			printf("Error joining thread (index %zu)\n", i);
 			data->flag_error = ERROR;
+			printf("Error joining threads\n");
 		}
 		i++;
 	}
-	free(data->philo.arr);
-	if (mutex_destroy(data) == EXIT_FAILURE)
-		data->flag_error = ERROR;
-	if (data->flag_error == ERROR)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	cleanup(data, C3);
 }

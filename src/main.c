@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:57 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/05 13:29:48 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/06 12:35:40 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,15 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	if (parse_arguments(argc, argv, &data) == EXIT_FAILURE)
+	if (parse_arguments(argc, argv, &data) != SUCCESS)
 		return (EXIT_FAILURE);
-	if (philo_alloc(&data) == EXIT_FAILURE)
+	if (mem_alloc(&data) != SUCCESS)
 		return (EXIT_FAILURE);
-	if (mutex_init(&data) == EXIT_FAILURE)
-	{
-		free(data.philo.arr);
+	if (fork_init(&data) != SUCCESS)
 		return (EXIT_FAILURE);
-	}
-	if (philo_init(&data) == EXIT_FAILURE)
-		data.flag_error = ERROR;
-	else
-		data.flag_error = NO_ERROR;
-	return (philo_end(&data));
+	philo_init(&data);
+	philo_end(&data);
+	if (data.flag_error == ERROR)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
