@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 16:34:56 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 11:50:35 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ void	philos_init(t_data *data)
 	while (i < (size_t)data->philos_count)
 	{
 		data->philos[i].id = i;
+		data->philos[i].data = data;
 		if (pthread_create(&data->philos[i].philo_thread, NULL,
-				philo_routine, data) != SUCCESS)
+				philo_routine, (void*)&(data->philos[i])) != SUCCESS)
 		{
 			data->philos_created = i;
 			data->flag_error = ERROR;

@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 16:25:40 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 12:54:58 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,13 @@
 # define C1 1
 # define C2 2
 # define C3 3
-# define C4 4
 
 //------------------------------------------------------------------------------
 // Type Definitions
 //------------------------------------------------------------------------------
 
-/**
- * @brief Unique attributes of each philosopher.
- * @param id Identification number of a philosopher.
- * @param philo_thread Thread identifier.
- * @param fork_left Mutex object of the left fork.
- * @param fork_right Mutex object of the right fork.
- */
-typedef struct s_philo
-{
-	size_t			id;
-	pthread_t		philo_thread;
-	pthread_mutex_t	fork_left;
-	pthread_mutex_t	fork_right;
-}	t_philo;
+struct					s_philo;
+typedef struct s_philo	t_philo;
 
 /**
  * @brief Data used by the program.
@@ -92,6 +79,22 @@ typedef struct s_data
 	t_philo			*philos;
 }	t_data;
 
+/**
+ * @brief Unique attributes of each philosopher.
+ * @param id Identification number of a philosopher.
+ * @param philo_thread Thread identifier.
+ * @param mtx_fork_left Mutex object of the left fork.
+ * @param mtx_fork_right Mutex object of the right fork.
+ */
+typedef struct s_philo
+{
+	size_t			id;
+	pthread_t		philo_thread;
+	pthread_mutex_t	mtx_fork_left;
+	pthread_mutex_t	mtx_fork_right;
+	t_data			*data;
+}	t_philo;
+
 //------------------------------------------------------------------------------
 // Function Prototypes
 //------------------------------------------------------------------------------
@@ -112,11 +115,11 @@ void		cleanup(t_data *data, int flag_clean);
 uint64_t	get_time(void);
 
 /**
- * @brief Gets the current timestamp.
+ * @brief Gets the difference between the current and starting time.
  * @param data Data used by the program.
  * @return Current timestamp.
  */
-uint64_t	get_timestamp(t_data *data);
+uint64_t	get_time_diff(t_data *data);
 
 /**
  * @brief Allocates memory for all philosophers and forks.

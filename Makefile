@@ -6,13 +6,13 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/30 14:51:29 by bgazur            #+#    #+#              #
-#    Updated: 2025/07/05 18:26:17 by bgazur           ###   ########.fr        #
+#    Updated: 2025/07/07 09:34:20 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =		philo
 CC =		cc
-CFLAGS =	-Wall -Werror -Wextra
+CFLAGS =	-Wall -Werror -Wextra -g
 RM =		rm -f
 
 INC_DIR =	include
@@ -25,7 +25,6 @@ OBJ =		$(SRC:%.c=$(OBJ_DIR)/%.o)
 
 SRC =		lifecycle.c \
 			main.c \
-			mutex.c \
 			parsing.c \
 			routine.c \
 			utils.c

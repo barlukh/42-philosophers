@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 18:20:05 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 16:25:40 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 08:14:56 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ uint64_t	get_time(void)
 	return ((uint64_t)(tv.tv_sec * 1000) + (uint64_t)(tv.tv_usec / 1000));
 }
 
-uint64_t	get_timestamp(t_data *data)
+uint64_t	get_time_diff(t_data *data)
 {
 	return (get_time() - data->time_start);
 }
