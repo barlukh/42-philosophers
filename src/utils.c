@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 18:20:05 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/07 08:14:56 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:04:25 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,16 @@ void	cleanup(t_data *data, int flag_clean)
 
 	if (flag_clean == C3)
 	{
-		pthread_mutex_destroy(&(data->mtx_general));
+		pthread_mutex_destroy(&(data->lock));
 		i = 0;
 		while (i < data->forks_created)
 		{
-			pthread_mutex_destroy(&(data->mtx_forks[i]));
+			pthread_mutex_destroy(&(data->forks[i]));
 			i++;
 		}
 	}
 	if (flag_clean == C2 || flag_clean == C3)
-		free(data->mtx_forks);
+		free(data->forks);
 	if ((flag_clean == C1 || flag_clean == C2 || flag_clean == C3))
 		free(data->philos);
 }

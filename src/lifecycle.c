@@ -6,11 +6,13 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/07 11:50:35 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:30:54 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+static void	assign_forks(t_data *data);
 
 int	mem_alloc(t_data *data)
 {
@@ -20,8 +22,8 @@ int	mem_alloc(t_data *data)
 		printf("Error allocating memory\n");
 		return (FAILURE);
 	}
-	data->mtx_forks = malloc(sizeof(pthread_mutex_t) * data->philos_count);
-	if (!data->mtx_forks)
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->philos_count);
+	if (!data->forks)
 	{
 		cleanup(data, C1);
 		printf("Error allocating memory\n");
@@ -34,7 +36,7 @@ int	forks_init(t_data *data)
 {
 	size_t	i;
 
-	if (pthread_mutex_init(&(data->mtx_general), NULL) != SUCCESS)
+	if (pthread_mutex_init(&(data->lock), NULL) != SUCCESS)
 	{
 		cleanup(data, C2);
 		printf("Error initializing mutex objects\n");
@@ -43,7 +45,7 @@ int	forks_init(t_data *data)
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
-		if (pthread_mutex_init(&(data->mtx_forks[i]), NULL) != SUCCESS)
+		if (pthread_mutex_init(&(data->forks[i]), NULL) != SUCCESS)
 		{
 			data->forks_created = i;
 			cleanup(data, C3);
@@ -66,6 +68,7 @@ void	philos_init(t_data *data)
 	{
 		data->philos[i].id = i;
 		data->philos[i].data = data;
+		assign_forks(data);
 		if (pthread_create(&data->philos[i].philo_thread, NULL,
 				philo_routine, (void*)&(data->philos[i])) != SUCCESS)
 		{
@@ -79,6 +82,21 @@ void	philos_init(t_data *data)
 	data->philos_created = i;
 	data->time_start = get_time();
 	data->flag_error = NO_ERROR;
+}
+
+// Assigns correct fork mutex objects to each philosopher.
+static void	assign_forks(t_data *data)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < (size_t)data->philos_count)
+	{
+		data->philos[i].fork_left = &(data->forks[i]);
+		data->philos[i].fork_right = &(data->forks[(i + 1)
+				% data->philos_count]);
+		i++;
+	}
 }
 
 void	philos_end(t_data *data)

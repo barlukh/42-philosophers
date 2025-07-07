@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/07 12:54:58 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 13:22:55 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ typedef struct s_philo	t_philo;
  * @param forks_created Number of successfully created forks.
  * @param philos_created Number of successfully created philosophers.
  * @param time_start Starting timestamp.
- * @param mtx_general General purpose mutex object.
- * @param mtx_forks Array of fork mutex objects.
+ * @param lock General purpose mutex object.
+ * @param forks Array of fork mutex objects.
  * @param philos Array of philosophers and their attributes.
  */
 typedef struct s_data
@@ -74,8 +74,8 @@ typedef struct s_data
 	size_t			forks_created;
 	size_t			philos_created;
 	uint64_t		time_start;
-	pthread_mutex_t	mtx_general;
-	pthread_mutex_t	*mtx_forks;
+	pthread_mutex_t	lock;
+	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }	t_data;
 
@@ -83,15 +83,16 @@ typedef struct s_data
  * @brief Unique attributes of each philosopher.
  * @param id Identification number of a philosopher.
  * @param philo_thread Thread identifier.
- * @param mtx_fork_left Mutex object of the left fork.
- * @param mtx_fork_right Mutex object of the right fork.
+ * @param fork_left Mutex object of the left fork.
+ * @param fork_right Mutex object of the right fork.
+ * @param data Data used by the program.
  */
 typedef struct s_philo
 {
 	size_t			id;
 	pthread_t		philo_thread;
-	pthread_mutex_t	mtx_fork_left;
-	pthread_mutex_t	mtx_fork_right;
+	pthread_mutex_t	*fork_left;
+	pthread_mutex_t	*fork_right;
 	t_data			*data;
 }	t_philo;
 
