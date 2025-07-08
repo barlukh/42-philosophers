@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 18:20:05 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/07 13:04:25 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 08:59:10 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ uint64_t	get_time_diff(t_data *data)
 	return (get_time() - data->time_start);
 }
 
-void	cleanup(t_data *data, int flag_clean)
+void	cleanup(t_data *data, int flag)
 {
 	size_t	i;
 
-	if (flag_clean == C3)
+	if (flag == CLEAN_ALL)
 	{
-		pthread_mutex_destroy(&(data->lock));
+		pthread_mutex_destroy(&(data->print));
 		i = 0;
 		while (i < data->forks_created)
 		{
@@ -39,8 +39,8 @@ void	cleanup(t_data *data, int flag_clean)
 			i++;
 		}
 	}
-	if (flag_clean == C2 || flag_clean == C3)
+	if (flag == ERR_MTX || flag == CLEAN_ALL)
 		free(data->forks);
-	if ((flag_clean == C1 || flag_clean == C2 || flag_clean == C3))
+	if ((flag == ERR_MEM || flag == ERR_MTX || flag == CLEAN_ALL))
 		free(data->philos);
 }
