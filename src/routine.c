@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 10:24:58 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 12:00:25 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ void	*philo_routine(void *arg)
 
 	philo = arg;
 	routine_delay(philo);
-	while (true)
+	while (philo->data->flag_death != true && philo->data->flag_full != true)
 	{
 		if (philo->id % 2 != 0)
 			routine_eat_odd(philo);
 		else
 			routine_eat_even(philo);
+		if (philo->data->must_eat != NOT_SET)
+			philo->times_eaten++;
 		routine_after_dinner(philo);
 	}
 	return (NULL);

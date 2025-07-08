@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 10:16:01 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:51:02 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ typedef struct s_philo	t_philo;
 /**
  * @brief Data used by the program.
  * @param flag_error Flag singaling an error.
+ * @param flag_death Flag signaling a death of a philosopher.
+ * @param flag_full Flag singaling a full state of a philosopher.
  * @param philos_count Number of philosophers.
  * @param tt_die Time to die (milliseconds).
  * @param tt_eat Time to eat (milliseconds).
@@ -68,6 +70,8 @@ typedef struct s_philo	t_philo;
 typedef struct s_data
 {
 	_Atomic int		flag_error;
+	_Atomic int		flag_death;
+	_Atomic int		flag_full;
 	int				philos_count;
 	int				tt_die;
 	int				tt_eat;
@@ -84,6 +88,7 @@ typedef struct s_data
 /**
  * @brief Unique attributes of each philosopher.
  * @param id Identification number of a philosopher.
+ * @param times_eaten Counter of how many times has a philosopher eaten.
  * @param philo_thread Thread identifier.
  * @param fork_left Mutex object of the left fork.
  * @param fork_right Mutex object of the right fork.
@@ -92,6 +97,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	size_t			id;
+	size_t			times_eaten;
 	pthread_t		philo_thread;
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
@@ -137,6 +143,12 @@ int			mem_alloc(t_data *data);
  * @return SUCCESS or FAILURE.
  */
 int			mtx_init(t_data *data);
+
+/**
+ * @brief Monitors the state of each philosopher.
+ * @param data Data used by the program.
+ */
+void		observer_monitor(t_data *data);
 
 /**
  * @brief Prints a status change message in a thread safe manner.

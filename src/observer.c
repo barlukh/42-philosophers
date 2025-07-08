@@ -1,32 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   observer.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/30 14:53:57 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 11:39:55 by bgazur           ###   ########.fr       */
+/*   Created: 2025/07/08 10:44:22 by bgazur            #+#    #+#             */
+/*   Updated: 2025/07/08 11:58:45 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
-int	main(int argc, char **argv)
+void	observer_monitor(t_data *data)
 {
-	t_data	data;
+	int		flag_break;
+	size_t	i;
 
-	if (parse_arguments(argc, argv, &data) != SUCCESS)
-		return (EXIT_FAILURE);
-	if (mem_alloc(&data) != SUCCESS)
-		return (EXIT_FAILURE);
-	if (mtx_init(&data) != SUCCESS)
-		return (EXIT_FAILURE);
-	philos_init(&data);
-	if (data.flag_error != ERROR)
-		observer_monitor(&data);
-	philos_end(&data);
-	if (data.flag_error == ERROR)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
+	flag_break = false;
+	data->flag_death = false;
+	data->flag_full = false;
+	while (true)
+	{
+		i = 0;
+		while (i < (size_t)data->philos_count)
+		{
+			if (data->philos[i].times_eaten == (size_t)data->must_eat)
+			{
+				flag_break = true;
+				data->flag_full = true;
+				break ;
+			}
+			i++;
+		}
+		if (flag_break == true)
+			break ;
+	}
 }

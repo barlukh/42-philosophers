@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 09:10:45 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 11:36:08 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	philos_init(t_data *data)
 	while (i < (size_t)data->philos_count)
 	{
 		data->philos[i].id = i;
+		data->philos[i].times_eaten = 0;
 		data->philos[i].data = data;
 		assign_forks(data);
 		if (pthread_create(&data->philos[i].philo_thread, NULL,
