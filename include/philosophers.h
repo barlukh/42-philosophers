@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 09:11:01 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 10:16:01 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
+# define DELAY 250
 # define VALID_USLEEP 999
 
 # define SUCCESS 0
@@ -136,6 +137,34 @@ int			mem_alloc(t_data *data);
  * @return SUCCESS or FAILURE.
  */
 int			mtx_init(t_data *data);
+
+/**
+ * @brief Prints a status change message in a thread safe manner.
+ * @param philo Unique attributes of each philosopher.
+ * @return None.
+ */
+void		output_fork_first(t_philo *philo);
+
+/**
+ * @brief Prints a status change message in a thread safe manner.
+ * @param philo Unique attributes of each philosopher.
+ * @return None.
+ */
+void		output_fork_second(t_philo *philo);
+
+/**
+ * @brief Prints a status change message in a thread safe manner.
+ * @param philo Unique attributes of each philosopher.
+ * @return None.
+ */
+void		output_sleeping(t_philo *philo);
+
+/**
+ * @brief Prints a status change message in a thread safe manner.
+ * @param philo Unique attributes of each philosopher.
+ * @return None.
+ */
+void		output_thinking(t_philo *philo);
 
 /**
  * @brief Parses arguments from the command line.
