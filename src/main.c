@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:57 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 16:09:55 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/07 14:43:38 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	if (mem_alloc(&data) != SUCCESS)
 		return (EXIT_FAILURE);
-	if (forks_init(&data) != SUCCESS)
+	if (mtx_init(&data) != SUCCESS)
 		return (EXIT_FAILURE);
 	philos_init(&data);
 	philos_end(&data);
