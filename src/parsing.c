@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/06 16:08:47 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 08:36:56 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	ft_atoi(const char *s)
 	while (s[i] != '\0' && (s[i] >= '0' && s[i] <= '9'))
 	{
 		result = result * 10 + (s[i] - '0');
-		if (result > INT_MAX)
+		if (result > VALID_USLEEP)
 			return (ERROR);
 		i++;
 	}
