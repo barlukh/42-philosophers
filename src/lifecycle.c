@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/07 13:30:54 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 09:10:45 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,20 @@ int	mem_alloc(t_data *data)
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philos_count);
 	if (!data->forks)
 	{
-		cleanup(data, C1);
+		cleanup(data, ERR_MEM);
 		printf("Error allocating memory\n");
 		return (FAILURE);
 	}
 	return (SUCCESS);
 }
 
-int	forks_init(t_data *data)
+int	mtx_init(t_data *data)
 {
 	size_t	i;
 
-	if (pthread_mutex_init(&(data->lock), NULL) != SUCCESS)
+	if (pthread_mutex_init(&(data->print), NULL) != SUCCESS)
 	{
-		cleanup(data, C2);
+		cleanup(data, ERR_MTX);
 		printf("Error initializing mutex objects\n");
 		return (FAILURE);
 	}
@@ -48,7 +48,7 @@ int	forks_init(t_data *data)
 		if (pthread_mutex_init(&(data->forks[i]), NULL) != SUCCESS)
 		{
 			data->forks_created = i;
-			cleanup(data, C3);
+			cleanup(data, CLEAN_ALL);
 			printf("Error initializing mutex objects\n");
 			return (FAILURE);
 		}
@@ -113,5 +113,5 @@ void	philos_end(t_data *data)
 		}
 		i++;
 	}
-	cleanup(data, C3);
+	cleanup(data, CLEAN_ALL);
 }

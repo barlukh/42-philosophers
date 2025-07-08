@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/07 13:22:55 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/08 09:11:01 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 // Library Headers
 //------------------------------------------------------------------------------
 
-# include <limits.h>
 # include <pthread.h>
 # include <stdbool.h>
 # include <stdint.h>
@@ -30,6 +29,8 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
+# define VALID_USLEEP 999
+
 # define SUCCESS 0
 # define FAILURE 1
 
@@ -37,9 +38,9 @@
 # define ERROR 0
 # define NO_ERROR 1
 
-# define C1 1
-# define C2 2
-# define C3 3
+# define ERR_MEM 1
+# define ERR_MTX 2
+# define CLEAN_ALL 3
 
 //------------------------------------------------------------------------------
 // Type Definitions
@@ -52,14 +53,14 @@ typedef struct s_philo	t_philo;
  * @brief Data used by the program.
  * @param flag_error Flag singaling an error.
  * @param philos_count Number of philosophers.
- * @param tt_die Time to die.
- * @param tt_eat Time to eat.
- * @param tt_sleep Time to sleep.
+ * @param tt_die Time to die (milliseconds).
+ * @param tt_eat Time to eat (milliseconds).
+ * @param tt_sleep Time to sleep (milliseconds).
  * @param must_eat Number of times each philosopher must eat, -1 if not set.
  * @param forks_created Number of successfully created forks.
  * @param philos_created Number of successfully created philosophers.
- * @param time_start Starting timestamp.
- * @param lock General purpose mutex object.
+ * @param time_start Starting time.
+ * @param print Mutex object for printf() function.
  * @param forks Array of fork mutex objects.
  * @param philos Array of philosophers and their attributes.
  */
@@ -74,7 +75,7 @@ typedef struct s_data
 	size_t			forks_created;
 	size_t			philos_created;
 	uint64_t		time_start;
-	pthread_mutex_t	lock;
+	pthread_mutex_t	print;
 	pthread_mutex_t	*forks;
 	t_philo			*philos;
 }	t_data;
@@ -103,22 +104,22 @@ typedef struct s_philo
 /**
  * @brief Cleans up resources.
  * @param data Data used by the program.
- * @param flag_clean Flag signaling cleaning operations.
+ * @param flag Flag signaling cleaning operations.
  * @return None.
  */
-void		cleanup(t_data *data, int flag_clean);
+void		cleanup(t_data *data, int flag);
 
 /**
  * @brief Gets the current time.
  * @param void None.
- * @return Current time.
+ * @return Current time (milliseconds).
  */
 uint64_t	get_time(void);
 
 /**
  * @brief Gets the difference between the current and starting time.
  * @param data Data used by the program.
- * @return Current timestamp.
+ * @return Time difference (milliseconds).
  */
 uint64_t	get_time_diff(t_data *data);
 
@@ -130,11 +131,11 @@ uint64_t	get_time_diff(t_data *data);
 int			mem_alloc(t_data *data);
 
 /**
- * @brief Creates all forks.
+ * @brief Initializes all mutex objects.
  * @param data Data used by the program.
  * @return SUCCESS or FAILURE.
  */
-int			forks_init(t_data *data);
+int			mtx_init(t_data *data);
 
 /**
  * @brief Parses arguments from the command line.
