@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 12:18:20 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:00:41 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
-# define DELAY 250
+# define DELAY_START 250
+# define DELAY_DEATH 1000
 # define VALID_USLEEP 999
 
 # define SUCCESS 0
@@ -54,6 +55,7 @@ typedef struct s_philo	t_philo;
  * @brief Data used by the program.
  * @param flag_error Flag singaling an error.
  * @param flag_death Flag signaling a death of a philosopher.
+ * @param flag_all_full Flag signaling if all philosophers have eaten.
  * @param philos_count Number of philosophers.
  * @param tt_die Time to die (milliseconds).
  * @param tt_eat Time to eat (milliseconds).
@@ -70,12 +72,12 @@ typedef struct s_data
 {
 	_Atomic int		flag_error;
 	_Atomic int		flag_death;
-	_Atomic int		flag_stop;
+	_Atomic int		flag_all_full;
+	_Atomic int		tt_die;
+	_Atomic int		tt_eat;
+	_Atomic int		tt_sleep;
+	_Atomic int		must_eat;
 	int				philos_count;
-	int				tt_die;
-	int				tt_eat;
-	int				tt_sleep;
-	int				must_eat;
 	size_t			forks_created;
 	size_t			philos_created;
 	uint64_t		time_start;
@@ -94,16 +96,24 @@ typedef struct s_data
  */
 typedef struct s_philo
 {
-	size_t			id;
-	size_t			times_eaten;
-	pthread_t		philo_thread;
-	pthread_mutex_t	*fork[2];
-	t_data			*data;
+	_Atomic uint64_t	last_meal;
+	size_t				id;
+	size_t				times_eaten;
+	pthread_t			philo_thread;
+	pthread_mutex_t		*fork[2];
+	t_data				*data;
 }	t_philo;
 
 //------------------------------------------------------------------------------
 // Function Prototypes
 //------------------------------------------------------------------------------
+
+/**
+ * @brief Assigns fork mutex objects to each philosopher.
+ * @param data Data used by the program.
+ * @return None.
+ */
+void		assign_forks(t_data *data);
 
 /**
  * @brief Cleans up resources.
@@ -121,11 +131,11 @@ void		cleanup(t_data *data, int flag);
 uint64_t	get_time(void);
 
 /**
- * @brief Gets the difference between the current and starting time.
- * @param data Data used by the program.
+ * @brief Gets the difference between the current and the passed time.
+ * @param time Time value to count the difference from.
  * @return Time difference (milliseconds).
  */
-uint64_t	get_time_diff(t_data *data);
+uint64_t	get_time_diff(uint64_t time);
 
 /**
  * @brief Allocates memory for all philosophers and forks.
@@ -146,13 +156,14 @@ int			mtx_init(t_data *data);
  * @param philo Unique attributes of each philosopher.
  * @return None.
  */
-void		output_fork_first(t_philo *philo);
+void		output_death(t_philo *philo);
 
 /**
- * @brief Monitors the death state of each philosopher.
- * @param data Data used by the program.
+ * @brief Prints a status change message in a thread safe manner.
+ * @param philo Unique attributes of each philosopher.
+ * @return None.
  */
-void		overseer(t_data *data);
+void		output_fork_first(t_philo *philo);
 
 /**
  * @brief Prints a status change message in a thread safe manner.
@@ -174,6 +185,12 @@ void		output_sleeping(t_philo *philo);
  * @return None.
  */
 void		output_thinking(t_philo *philo);
+
+/**
+ * @brief Monitors the death state of each philosopher.
+ * @param data Data used by the program.
+ */
+void		overseer(t_data *data);
 
 /**
  * @brief Parses arguments from the command line.
@@ -204,5 +221,12 @@ void		philos_init(t_data *data);
  * @return None.
  */
 void		*philo_routine(void *arg);
+
+/**
+ * @brief Sets initial times for last meal and simulation start.
+ * @param data Data used by the program.
+ * @return None.
+ */
+void		set_times(t_data *data);
 
 #endif

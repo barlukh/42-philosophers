@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 12:14:40 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:01:20 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	routine_delay(t_philo *philo);
 static void	routine_eat(t_philo *philo);
-static int	routine_full_check(t_philo *philo);
+static int	routine_is_full_check(t_philo *philo);
 static void	routine_after_dinner(t_philo *philo);
 
 void	*philo_routine(void *arg)
@@ -25,8 +25,14 @@ void	*philo_routine(void *arg)
 	routine_delay(philo);
 	while (true)
 	{
+		if (philo->data->flag_death == true)
+			break ;
 		routine_eat(philo);
-		if (routine_full_check(philo) == true)
+		if (philo->data->flag_death == true)
+			break ;
+		if (routine_is_full_check(philo) == true)
+			break ;
+		if (philo->data->flag_death == true)
 			break ;
 		routine_after_dinner(philo);
 	}
@@ -42,7 +48,7 @@ static void	routine_delay(t_philo *philo)
 			break ;
 	}
 	if (philo->id % 2 == 0)
-		usleep(DELAY);
+		usleep(DELAY_START);
 }
 
 // Runs the eating routine.
@@ -53,18 +59,22 @@ static void	routine_eat(t_philo *philo)
 	pthread_mutex_lock(philo->fork[1]);
 	output_fork_second(philo);
 	usleep(philo->data->tt_eat * 1000);
+	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->fork[0]);
 	pthread_mutex_unlock(philo->fork[1]);
 }
 
 // Checks if a philosopher is full.
-static int	routine_full_check(t_philo *philo)
+static int	routine_is_full_check(t_philo *philo)
 {
 	if (philo->data->must_eat != NOT_SET)
 	{
 		philo->times_eaten++;
 		if (philo->times_eaten == (size_t)philo->data->must_eat)
+		{
+			philo->data->flag_all_full++;
 			return (true);
+		}
 	}
 	return (false);
 }

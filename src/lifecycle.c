@@ -6,13 +6,11 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 12:12:06 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 17:02:30 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
-
-static void	assign_forks(t_data *data);
 
 int	mem_alloc(t_data *data)
 {
@@ -62,14 +60,16 @@ void	philos_init(t_data *data)
 {
 	size_t	i;
 
+	assign_forks(data);
 	data->flag_error = NOT_SET;
+	data->flag_death = false;
+	data->flag_all_full = 0;
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
 		data->philos[i].id = i + 1;
 		data->philos[i].times_eaten = 0;
 		data->philos[i].data = data;
-		assign_forks(data);
 		if (pthread_create(&data->philos[i].philo_thread, NULL,
 				philo_routine, (void*)&(data->philos[i])) != SUCCESS)
 		{
@@ -81,32 +81,8 @@ void	philos_init(t_data *data)
 		i++;
 	}
 	data->philos_created = i;
-	data->time_start = get_time();
+	set_times(data);
 	data->flag_error = NO_ERROR;
-}
-
-// Assigns fork mutex objects to each philosopher.
-static void	assign_forks(t_data *data)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < (size_t)data->philos_count)
-	{
-		if (i % 2 == 0)
-		{
-			data->philos[i].fork[0] = &(data->forks[i]);
-			data->philos[i].fork[1] = &(data->forks[(i + 1)
-					% data->philos_count]);
-		}
-		else
-		{
-			data->philos[i].fork[0] = &(data->forks[(i + 1)
-					% data->philos_count]);
-			data->philos[i].fork[1] = &(data->forks[i]);
-		}
-		i++;
-	}
 }
 
 void	philos_end(t_data *data)
