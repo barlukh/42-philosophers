@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:57 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 11:39:55 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 11:47:15 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	philos_init(&data);
 	if (data.flag_error != ERROR)
-		observer_monitor(&data);
+		overseer(&data);
 	philos_end(&data);
 	if (data.flag_error == ERROR)
 		return (EXIT_FAILURE);

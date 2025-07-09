@@ -6,15 +6,15 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 12:00:25 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 12:14:40 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static void	routine_delay(t_philo *philo);
-static void	routine_eat_even(t_philo *philo);
-static void	routine_eat_odd(t_philo *philo);
+static void	routine_eat(t_philo *philo);
+static int	routine_full_check(t_philo *philo);
 static void	routine_after_dinner(t_philo *philo);
 
 void	*philo_routine(void *arg)
@@ -23,19 +23,17 @@ void	*philo_routine(void *arg)
 
 	philo = arg;
 	routine_delay(philo);
-	while (philo->data->flag_death != true && philo->data->flag_full != true)
+	while (true)
 	{
-		if (philo->id % 2 != 0)
-			routine_eat_odd(philo);
-		else
-			routine_eat_even(philo);
-		if (philo->data->must_eat != NOT_SET)
-			philo->times_eaten++;
+		routine_eat(philo);
+		if (routine_full_check(philo) == true)
+			break ;
 		routine_after_dinner(philo);
 	}
 	return (NULL);
 }
 
+// Delays the routine to ensure a simultaneous start and to prevent deadlocks.
 static void	routine_delay(t_philo *philo)
 {
 	while (true)
@@ -43,32 +41,35 @@ static void	routine_delay(t_philo *philo)
 		if (philo->data->flag_error == NO_ERROR)
 			break ;
 	}
-	if (philo->id % 2 != 0)
+	if (philo->id % 2 == 0)
 		usleep(DELAY);
 }
 
-static void	routine_eat_even(t_philo *philo)
+// Runs the eating routine.
+static void	routine_eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->fork_left);
+	pthread_mutex_lock(philo->fork[0]);
 	output_fork_first(philo);
-	pthread_mutex_lock(philo->fork_right);
+	pthread_mutex_lock(philo->fork[1]);
 	output_fork_second(philo);
 	usleep(philo->data->tt_eat * 1000);
-	pthread_mutex_unlock(philo->fork_left);
-	pthread_mutex_unlock(philo->fork_right);
+	pthread_mutex_unlock(philo->fork[0]);
+	pthread_mutex_unlock(philo->fork[1]);
 }
 
-static void	routine_eat_odd(t_philo *philo)
+// Checks if a philosopher is full.
+static int	routine_full_check(t_philo *philo)
 {
-	pthread_mutex_lock(philo->fork_right);
-	output_fork_first(philo);
-	pthread_mutex_lock(philo->fork_left);
-	output_fork_second(philo);
-	usleep(philo->data->tt_eat * 1000);
-	pthread_mutex_unlock(philo->fork_right);
-	pthread_mutex_unlock(philo->fork_left);
+	if (philo->data->must_eat != NOT_SET)
+	{
+		philo->times_eaten++;
+		if (philo->times_eaten == (size_t)philo->data->must_eat)
+			return (true);
+	}
+	return (false);
 }
 
+// Runs the routine for sleeping and thinking.
 static void	routine_after_dinner(t_philo *philo)
 {
 	output_sleeping(philo);

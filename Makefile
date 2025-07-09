@@ -6,7 +6,7 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/30 14:51:29 by bgazur            #+#    #+#              #
-#    Updated: 2025/07/08 10:50:30 by bgazur           ###   ########.fr        #
+#    Updated: 2025/07/09 10:58:54 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ OBJ =		$(SRC:%.c=$(OBJ_DIR)/%.o)
 
 SRC =		lifecycle.c \
 			main.c \
-			observer.c \
 			output.c \
+			overseer.c \
 			parsing.c \
 			routine.c \
 			utils.c

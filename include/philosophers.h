@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 11:51:02 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 12:18:20 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_philo	t_philo;
  * @brief Data used by the program.
  * @param flag_error Flag singaling an error.
  * @param flag_death Flag signaling a death of a philosopher.
- * @param flag_full Flag singaling a full state of a philosopher.
  * @param philos_count Number of philosophers.
  * @param tt_die Time to die (milliseconds).
  * @param tt_eat Time to eat (milliseconds).
@@ -71,7 +70,7 @@ typedef struct s_data
 {
 	_Atomic int		flag_error;
 	_Atomic int		flag_death;
-	_Atomic int		flag_full;
+	_Atomic int		flag_stop;
 	int				philos_count;
 	int				tt_die;
 	int				tt_eat;
@@ -90,8 +89,7 @@ typedef struct s_data
  * @param id Identification number of a philosopher.
  * @param times_eaten Counter of how many times has a philosopher eaten.
  * @param philo_thread Thread identifier.
- * @param fork_left Mutex object of the left fork.
- * @param fork_right Mutex object of the right fork.
+ * @param fork Array of two fork pointers assigned to a philosopher.
  * @param data Data used by the program.
  */
 typedef struct s_philo
@@ -99,8 +97,7 @@ typedef struct s_philo
 	size_t			id;
 	size_t			times_eaten;
 	pthread_t		philo_thread;
-	pthread_mutex_t	*fork_left;
-	pthread_mutex_t	*fork_right;
+	pthread_mutex_t	*fork[2];
 	t_data			*data;
 }	t_philo;
 
@@ -145,17 +142,17 @@ int			mem_alloc(t_data *data);
 int			mtx_init(t_data *data);
 
 /**
- * @brief Monitors the state of each philosopher.
- * @param data Data used by the program.
- */
-void		observer_monitor(t_data *data);
-
-/**
  * @brief Prints a status change message in a thread safe manner.
  * @param philo Unique attributes of each philosopher.
  * @return None.
  */
 void		output_fork_first(t_philo *philo);
+
+/**
+ * @brief Monitors the death state of each philosopher.
+ * @param data Data used by the program.
+ */
+void		overseer(t_data *data);
 
 /**
  * @brief Prints a status change message in a thread safe manner.

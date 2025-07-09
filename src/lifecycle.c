@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 11:36:08 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/09 12:12:06 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	philos_init(t_data *data)
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
-		data->philos[i].id = i;
+		data->philos[i].id = i + 1;
 		data->philos[i].times_eaten = 0;
 		data->philos[i].data = data;
 		assign_forks(data);
@@ -85,7 +85,7 @@ void	philos_init(t_data *data)
 	data->flag_error = NO_ERROR;
 }
 
-// Assigns correct fork mutex objects to each philosopher.
+// Assigns fork mutex objects to each philosopher.
 static void	assign_forks(t_data *data)
 {
 	size_t	i;
@@ -93,9 +93,18 @@ static void	assign_forks(t_data *data)
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
-		data->philos[i].fork_left = &(data->forks[i]);
-		data->philos[i].fork_right = &(data->forks[(i + 1)
-				% data->philos_count]);
+		if (i % 2 == 0)
+		{
+			data->philos[i].fork[0] = &(data->forks[i]);
+			data->philos[i].fork[1] = &(data->forks[(i + 1)
+					% data->philos_count]);
+		}
+		else
+		{
+			data->philos[i].fork[0] = &(data->forks[(i + 1)
+					% data->philos_count]);
+			data->philos[i].fork[1] = &(data->forks[i]);
+		}
 		i++;
 	}
 }
