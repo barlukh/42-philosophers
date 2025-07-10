@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 09:16:04 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:39:17 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 // Library Headers
 //------------------------------------------------------------------------------
 
+# include <limits.h>
 # include <pthread.h>
 # include <stdbool.h>
 # include <stdint.h>
@@ -43,7 +44,6 @@
 
 # define DELAY_START 250
 # define DELAY_MSG 1000
-# define VALID_USLEEP 999
 
 # define SUCCESS 0
 # define FAILURE 1
