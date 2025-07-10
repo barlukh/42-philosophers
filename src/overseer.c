@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 10:44:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 09:18:54 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:45:01 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	check_death(t_data *data)
 		if (get_time_diff(data->philos[i].last_meal) >= (uint64_t)data->tt_die)
 		{
 			data->flag_death = true;
-			usleep(DELAY_MSG);
+			usleep(DELAY_MSG_DIED);
 			output_msg(&(data->philos[i]), MSG_DIED);
 			return ;
 		}

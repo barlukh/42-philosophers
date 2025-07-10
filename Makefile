@@ -6,7 +6,7 @@
 #    By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/30 14:51:29 by bgazur            #+#    #+#              #
-#    Updated: 2025/07/09 10:58:54 by bgazur           ###   ########.fr        #
+#    Updated: 2025/07/10 09:42:02 by bgazur           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ SRC =		lifecycle.c \
 			overseer.c \
 			parsing.c \
 			routine.c \
-			utils.c
+			utils.c \
+			time.c
 
 $(NAME): $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)

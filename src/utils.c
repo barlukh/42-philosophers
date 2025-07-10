@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 18:20:05 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 16:53:54 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 10:20:24 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,11 @@ void	assign_forks(t_data *data)
 	}
 }
 
-void	set_times(t_data *data)
+void	output_msg(t_philo *philo, const char *s)
 {
-	size_t	i;
-
-	i = 0;
-	while (i < (size_t)data->philos_count)
-	{
-		data->philos[i].last_meal = get_time();
-		i++;
-	}
-	data->time_start = get_time();
-}
-
-uint64_t	get_time(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&(tv), NULL);
-	return ((uint64_t)(tv.tv_sec * 1000) + (uint64_t)(tv.tv_usec / 1000));
-}
-
-uint64_t	get_time_diff(uint64_t time)
-{
-	return (get_time() - time);
+	pthread_mutex_lock(&(philo->data->print));
+	printf("%ld %zu %s", get_time_diff(philo->data->time_start), philo->id, s);
+	pthread_mutex_unlock(&(philo->data->print));
 }
 
 void	cleanup(t_data *data, int flag)
