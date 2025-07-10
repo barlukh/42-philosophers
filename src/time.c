@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:41:52 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 10:19:59 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 15:31:39 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ uint64_t	get_time(void)
 	struct timeval	tv;
 
 	gettimeofday(&(tv), NULL);
-	return ((uint64_t)(tv.tv_sec * 1000) + (uint64_t)(tv.tv_usec / 1000));
+	return ((uint64_t)(tv.tv_sec * CNVRT) + (uint64_t)(tv.tv_usec / CNVRT));
 }
 
 uint64_t	get_time_diff(uint64_t time)
@@ -47,6 +47,6 @@ void	safe_sleep(t_philo *philo, atomic_int time)
 	{
 		if (philo->data->flag_death == true)
 			break ;
-		usleep(1000);
+		usleep(SLEEP_CHUNK);
 	}
 }

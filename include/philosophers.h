@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 12:37:30 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 15:35:21 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,12 @@
 # define MSG_THINK "is thinking\n"
 # define MSG_DIED "died\n"
 
+# define CNVRT 1000
+
 # define DELAY_START 250
 # define DELAY_MSG_DIED 1000
+# define THINKING 500
+# define SLEEP_CHUNK 1000
 
 # define SUCCESS 0
 # define FAILURE 1
