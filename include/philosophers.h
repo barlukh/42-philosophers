@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 17:00:41 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:16:04 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,20 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
+# define MSG_INV_ARG "Invalid arguments\n"
+# define MSG_ERR_MEM "Error allocating memory\n"
+# define MSG_ERR_INIT "Error initializing mutex objects\n"
+# define MSG_ERR_CREATE "Error creating threads\n"
+# define MSG_ERR_JOIN "Error joining threads\n"
+
+# define MSG_FORK "has taken a fork\n"
+# define MSG_EAT "is eating\n"
+# define MSG_SLEEP "is sleeping\n"
+# define MSG_THINK "is thinking\n"
+# define MSG_DIED "died\n"
+
 # define DELAY_START 250
-# define DELAY_DEATH 1000
+# define DELAY_MSG 1000
 # define VALID_USLEEP 999
 
 # define SUCCESS 0
@@ -55,12 +67,12 @@ typedef struct s_philo	t_philo;
  * @brief Data used by the program.
  * @param flag_error Flag singaling an error.
  * @param flag_death Flag signaling a death of a philosopher.
- * @param flag_all_full Flag signaling if all philosophers have eaten.
- * @param philos_count Number of philosophers.
- * @param tt_die Time to die (milliseconds).
+ * @param counter_all_full Counter tracking if all philosophers have eaten.
  * @param tt_eat Time to eat (milliseconds).
  * @param tt_sleep Time to sleep (milliseconds).
  * @param must_eat Number of times each philosopher must eat, -1 if not set.
+ * @param tt_die Time to die (milliseconds).
+ * @param philos_count Number of philosophers.
  * @param forks_created Number of successfully created forks.
  * @param philos_created Number of successfully created philosophers.
  * @param time_start Starting time.
@@ -72,11 +84,11 @@ typedef struct s_data
 {
 	_Atomic int		flag_error;
 	_Atomic int		flag_death;
-	_Atomic int		flag_all_full;
-	_Atomic int		tt_die;
+	_Atomic int		counter_all_full;
 	_Atomic int		tt_eat;
 	_Atomic int		tt_sleep;
 	_Atomic int		must_eat;
+	int				tt_die;
 	int				philos_count;
 	size_t			forks_created;
 	size_t			philos_created;
@@ -88,6 +100,7 @@ typedef struct s_data
 
 /**
  * @brief Unique attributes of each philosopher.
+ * @param last_meal Time of the last  meal.
  * @param id Identification number of a philosopher.
  * @param times_eaten Counter of how many times has a philosopher eaten.
  * @param philo_thread Thread identifier.
@@ -154,37 +167,10 @@ int			mtx_init(t_data *data);
 /**
  * @brief Prints a status change message in a thread safe manner.
  * @param philo Unique attributes of each philosopher.
+ * @param s Message to output.
  * @return None.
  */
-void		output_death(t_philo *philo);
-
-/**
- * @brief Prints a status change message in a thread safe manner.
- * @param philo Unique attributes of each philosopher.
- * @return None.
- */
-void		output_fork_first(t_philo *philo);
-
-/**
- * @brief Prints a status change message in a thread safe manner.
- * @param philo Unique attributes of each philosopher.
- * @return None.
- */
-void		output_fork_second(t_philo *philo);
-
-/**
- * @brief Prints a status change message in a thread safe manner.
- * @param philo Unique attributes of each philosopher.
- * @return None.
- */
-void		output_sleeping(t_philo *philo);
-
-/**
- * @brief Prints a status change message in a thread safe manner.
- * @param philo Unique attributes of each philosopher.
- * @return None.
- */
-void		output_thinking(t_philo *philo);
+void		output_msg(t_philo *philo, const char *s);
 
 /**
  * @brief Monitors the death state of each philosopher.

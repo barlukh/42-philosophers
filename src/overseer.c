@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 10:44:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 17:17:29 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:18:54 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	overseer(t_data *data)
 		check_death(data);
 		if (data->flag_death == true)
 			break ;
-		if (data->flag_all_full == data->philos_count)
+		if (data->counter_all_full == data->philos_count)
 			break ;
 	}
 }
@@ -34,11 +34,11 @@ static void	check_death(t_data *data)
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
-		if (get_time_diff(data->philos[i].last_meal) >= data->tt_die)
+		if (get_time_diff(data->philos[i].last_meal) >= (uint64_t)data->tt_die)
 		{
 			data->flag_death = true;
-			usleep(DELAY_DEATH);
-			output_death(&(data->philos[i]));
+			usleep(DELAY_MSG);
+			output_msg(&(data->philos[i]), MSG_DIED);
 			return ;
 		}
 		i++;

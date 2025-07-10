@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 17:01:20 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:13:14 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,10 @@ static void	routine_delay(t_philo *philo)
 static void	routine_eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
-	output_fork_first(philo);
+	output_msg(philo, MSG_FORK);
 	pthread_mutex_lock(philo->fork[1]);
-	output_fork_second(philo);
+	output_msg(philo, MSG_FORK);
+	output_msg(philo, MSG_EAT);
 	usleep(philo->data->tt_eat * 1000);
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->fork[0]);
@@ -72,7 +73,7 @@ static int	routine_is_full_check(t_philo *philo)
 		philo->times_eaten++;
 		if (philo->times_eaten == (size_t)philo->data->must_eat)
 		{
-			philo->data->flag_all_full++;
+			philo->data->counter_all_full++;
 			return (true);
 		}
 	}
@@ -82,7 +83,7 @@ static int	routine_is_full_check(t_philo *philo)
 // Runs the routine for sleeping and thinking.
 static void	routine_after_dinner(t_philo *philo)
 {
-	output_sleeping(philo);
+	output_msg(philo, MSG_SLEEP);
 	usleep(philo->data->tt_sleep * 1000);
-	output_thinking(philo);
+	output_msg(philo, MSG_THINK);
 }

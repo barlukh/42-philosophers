@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/09 17:02:30 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:13:14 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,14 @@ int	mem_alloc(t_data *data)
 	data->philos = malloc(sizeof(t_philo) * data->philos_count);
 	if (!data->philos)
 	{
-		printf("Error allocating memory\n");
+		printf(MSG_ERR_MEM);
 		return (FAILURE);
 	}
 	data->forks = malloc(sizeof(pthread_mutex_t) * data->philos_count);
 	if (!data->forks)
 	{
 		cleanup(data, ERR_MEM);
-		printf("Error allocating memory\n");
+		printf(MSG_ERR_MEM);
 		return (FAILURE);
 	}
 	return (SUCCESS);
@@ -37,7 +37,7 @@ int	mtx_init(t_data *data)
 	if (pthread_mutex_init(&(data->print), NULL) != SUCCESS)
 	{
 		cleanup(data, ERR_MTX);
-		printf("Error initializing mutex objects\n");
+		printf(MSG_ERR_INIT);
 		return (FAILURE);
 	}
 	i = 0;
@@ -47,7 +47,7 @@ int	mtx_init(t_data *data)
 		{
 			data->forks_created = i;
 			cleanup(data, CLEAN_ALL);
-			printf("Error initializing mutex objects\n");
+			printf(MSG_ERR_INIT);
 			return (FAILURE);
 		}
 		i++;
@@ -63,7 +63,7 @@ void	philos_init(t_data *data)
 	assign_forks(data);
 	data->flag_error = NOT_SET;
 	data->flag_death = false;
-	data->flag_all_full = 0;
+	data->counter_all_full = 0;
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
@@ -75,7 +75,7 @@ void	philos_init(t_data *data)
 		{
 			data->philos_created = i;
 			data->flag_error = ERROR;
-			printf("Error creating threads\n");
+			printf(MSG_ERR_CREATE);
 			return ;
 		}
 		i++;
@@ -95,7 +95,7 @@ void	philos_end(t_data *data)
 		if (pthread_join(data->philos[i].philo_thread, NULL) != SUCCESS)
 		{
 			data->flag_error = ERROR;
-			printf("Error joining threads\n");
+			printf(MSG_ERR_JOIN);
 		}
 		i++;
 	}

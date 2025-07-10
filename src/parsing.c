@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/08 09:11:52 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 09:06:28 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ int	parse_arguments(int argc, char **argv, t_data *data)
 {
 	if (check_argc(argc) != SUCCESS)
 	{
-		printf("Invalid arguments\n");
+		printf(MSG_INV_ARG);
 		return (FAILURE);
 	}
 	if (convert_argv(argc, argv, data) != SUCCESS)
 	{
-		printf("Invalid arguments\n");
+		printf(MSG_INV_ARG);
 		return (FAILURE);
 	}
 	return (SUCCESS);
@@ -86,5 +86,7 @@ static int	ft_atoi(const char *s)
 			return (ERROR);
 		i++;
 	}
+	if (s[i] != '\0')
+		return (ERROR);
 	return ((int)result);
 }
