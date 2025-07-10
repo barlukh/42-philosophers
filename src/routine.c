@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 10:35:03 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 12:06:23 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static void	routine_delay(t_philo *philo)
 		if (philo->data->flag_error == NO_ERROR)
 			break ;
 	}
-	if (philo->id % 2 == 0)
-		usleep(DELAY_START);
+	// if (philo->id % 2 == 0)
+	// 	usleep(DELAY_START);
 }
 
 // Runs the eating routine.
@@ -67,7 +67,9 @@ static void	routine_eating(t_philo *philo)
 	pthread_mutex_lock(philo->fork[1]);
 	output_msg(philo, MSG_FORK);
 	output_msg(philo, MSG_EAT);
+	philo->flag_eating = true;
 	safe_sleep(philo, philo->data->tt_eat);
+	philo->flag_eating = false;
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->fork[0]);
 	pthread_mutex_unlock(philo->fork[1]);

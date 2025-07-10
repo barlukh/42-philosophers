@@ -6,11 +6,13 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 09:13:14 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 12:14:00 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+static void	philo_set_values(t_data *data, size_t i);
 
 int	mem_alloc(t_data *data)
 {
@@ -67,9 +69,7 @@ void	philos_init(t_data *data)
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
-		data->philos[i].id = i + 1;
-		data->philos[i].times_eaten = 0;
-		data->philos[i].data = data;
+		philo_set_values(data, i);
 		if (pthread_create(&data->philos[i].philo_thread, NULL,
 				philo_routine, (void*)&(data->philos[i])) != SUCCESS)
 		{
@@ -83,6 +83,15 @@ void	philos_init(t_data *data)
 	data->philos_created = i;
 	set_times(data);
 	data->flag_error = NO_ERROR;
+}
+
+// Sets additional values to each philosopher.
+static void	philo_set_values(t_data *data, size_t i)
+{
+	data->philos[i].flag_eating = false;
+	data->philos[i].id = i + 1;
+	data->philos[i].times_eaten = 0;
+	data->philos[i].data = data;
 }
 
 void	philos_end(t_data *data)
