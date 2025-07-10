@@ -6,16 +6,16 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 10:09:13 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 10:35:03 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static void	routine_delay(t_philo *philo);
-static void	routine_dinner(t_philo *philo);
+static void	routine_eating(t_philo *philo);
 static int	routine_is_full_check(t_philo *philo);
-static void	routine_after_dinner(t_philo *philo);
+static void	routine_sleeping(t_philo *philo);
 
 void	*philo_routine(void *arg)
 {
@@ -27,14 +27,17 @@ void	*philo_routine(void *arg)
 	{
 		if (philo->data->flag_death == true)
 			break ;
-		routine_dinner(philo);
+		routine_eating(philo);
 		if (philo->data->flag_death == true)
 			break ;
 		if (routine_is_full_check(philo) == true)
 			break ;
 		if (philo->data->flag_death == true)
 			break ;
-		routine_after_dinner(philo);
+		routine_sleeping(philo);
+		if (philo->data->flag_death == true)
+			break ;
+		output_msg(philo, MSG_THINK);
 	}
 	return (NULL);
 }
@@ -52,10 +55,15 @@ static void	routine_delay(t_philo *philo)
 }
 
 // Runs the eating routine.
-static void	routine_dinner(t_philo *philo)
+static void	routine_eating(t_philo *philo)
 {
 	pthread_mutex_lock(philo->fork[0]);
 	output_msg(philo, MSG_FORK);
+	if (philo->data->philos_count == 1)
+	{
+		usleep(philo->data->tt_die * 1000);
+		return ;
+	}
 	pthread_mutex_lock(philo->fork[1]);
 	output_msg(philo, MSG_FORK);
 	output_msg(philo, MSG_EAT);
@@ -81,9 +89,8 @@ static int	routine_is_full_check(t_philo *philo)
 }
 
 // Runs the routine for sleeping and thinking.
-static void	routine_after_dinner(t_philo *philo)
+static void	routine_sleeping(t_philo *philo)
 {
 	output_msg(philo, MSG_SLEEP);
 	safe_sleep(philo, philo->data->tt_sleep);
-	output_msg(philo, MSG_THINK);
 }
