@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 12:05:24 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/10 12:37:30 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ typedef struct s_data
 
 /**
  * @brief Unique attributes of each philosopher.
- * @param flag_eating Flag signaling if a philosopher is eating.
  * @param last_meal Time of the last  meal.
  * @param id Identification number of a philosopher.
  * @param times_eaten Counter of how many times has a philosopher eaten.
@@ -111,7 +110,6 @@ typedef struct s_data
  */
 typedef struct s_philo
 {
-	int						flag_eating;
 	atomic_uint_fast64_t	last_meal;
 	size_t					id;
 	size_t					times_eaten;
