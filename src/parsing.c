@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 16:31:37 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 09:39:02 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/11 14:53:33 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static int	convert_argv(int argc, char **argv, t_data *data)
 	}
 	else
 		data->must_eat = NOT_SET;
+	data->tt_think = (data->tt_die - data->tt_eat - data->tt_sleep) / 2;
 	return (SUCCESS);
 }
 

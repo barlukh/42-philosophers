@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 15:35:21 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/11 13:53:41 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@
 
 # define DELAY_START 250
 # define DELAY_MSG_DIED 1000
-# define THINKING 500
 # define SLEEP_CHUNK 1000
 
 # define SUCCESS 0
@@ -72,12 +71,13 @@ typedef struct s_philo	t_philo;
  * @brief Data used by the program.
  * @param philos_count Number of philosophers.
  * @param tt_die Time to die (milliseconds).
- * @param flag_error Flag singaling an error.
- * @param flag_death Flag signaling a death of a philosopher.
- * @param counter_all_full Counter tracking if all philosophers have eaten.
  * @param tt_eat Time to eat (milliseconds).
  * @param tt_sleep Time to sleep (milliseconds).
  * @param must_eat Number of times each philosopher must eat, -1 if not set.
+ * @param tt_think Time to think (milliseconds).
+ * @param flag_error Flag singaling an error.
+ * @param flag_stop Flag signaling a stop of the simulation.
+ * @param philos_full Counter tracking how many philosophers are full.
  * @param forks_created Number of successfully created forks.
  * @param philos_created Number of successfully created philosophers.
  * @param time_start Starting time of the simulation.
@@ -89,12 +89,13 @@ typedef struct s_data
 {
 	int				philos_count;
 	int				tt_die;
+	int				tt_eat;
+	int				tt_sleep;
+	int				must_eat;
+	int				tt_think;
 	atomic_int		flag_error;
-	atomic_int		flag_death;
-	atomic_int		counter_all_full;
-	atomic_int		tt_eat;
-	atomic_int		tt_sleep;
-	atomic_int		must_eat;
+	atomic_int		flag_stop;
+	atomic_int		philos_full;
 	size_t			forks_created;
 	size_t			philos_created;
 	uint64_t		time_start;
@@ -106,8 +107,8 @@ typedef struct s_data
 /**
  * @brief Unique attributes of each philosopher.
  * @param last_meal Time of the last  meal.
- * @param id Identification number of a philosopher.
  * @param times_eaten Counter of how many times has a philosopher eaten.
+ * @param id Identification number of a philosopher.
  * @param philo_thread Thread identifier.
  * @param fork Array of two fork pointers assigned to a philosopher.
  * @param data Data used by the program.
@@ -115,8 +116,8 @@ typedef struct s_data
 typedef struct s_philo
 {
 	atomic_uint_fast64_t	last_meal;
+	atomic_size_t			times_eaten;
 	size_t					id;
-	size_t					times_eaten;
 	pthread_t				philo_thread;
 	pthread_mutex_t			*fork[2];
 	t_data					*data;
@@ -218,7 +219,7 @@ void		*philo_routine(void *arg);
  * @param philo Unique attributes of each philosopher.
  * @param time Total amount of time to pass to usleep().
  */
-void		safe_sleep(t_philo *philo, atomic_int time);
+void		safe_sleep(t_philo *philo, int time);
 
 /**
  * @brief Sets initial times for last meal and simulation start.

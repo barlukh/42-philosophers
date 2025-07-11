@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 09:41:52 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 15:31:39 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/11 13:54:02 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ uint64_t	get_time_diff(uint64_t time)
 	return (get_time() - time);
 }
 
-void	safe_sleep(t_philo *philo, atomic_int time)
+void	safe_sleep(t_philo *philo, int time)
 {
 	uint64_t	sleep_start;
 
 	sleep_start = get_time();
-	while (get_time() - sleep_start < time)
+	while (get_time() - sleep_start < (uint64_t)time)
 	{
-		if (philo->data->flag_death == true)
+		if (philo->data->flag_stop == true)
 			break ;
 		usleep(SLEEP_CHUNK);
 	}

@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/10 12:38:26 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/11 13:01:58 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	philos_init(t_data *data)
 
 	assign_forks(data);
 	data->flag_error = NOT_SET;
-	data->flag_death = false;
-	data->counter_all_full = 0;
+	data->flag_stop = false;
+	data->philos_full = 0;
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{
