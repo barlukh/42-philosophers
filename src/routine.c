@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/11 16:23:49 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/11 17:07:57 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,8 @@ void	*philo_routine(void *arg)
 	}
 	while (true)
 	{
-		if (philo->data->flag_stop == true)
-			break ;
 		routine_eat(philo);
-		if (philo->data->flag_stop == true)
-			break ;
 		routine_sleep(philo);
-		if (philo->data->flag_stop == true)
-			break ;
 		routine_think(philo);
 		if (philo->data->flag_stop == true)
 			break ;
@@ -66,9 +60,9 @@ static void	routine_eat(t_philo *philo)
 	pthread_mutex_lock(philo->fork[0]);
 	output_msg(philo, MSG_FORK);
 	pthread_mutex_lock(philo->fork[1]);
-	philo->last_meal = get_time();
 	output_msg(philo, MSG_FORK);
 	output_msg(philo, MSG_EAT);
+	philo->last_meal = get_time();
 	safe_sleep(philo, philo->data->tt_eat);
 	if (philo->data->must_eat != NOT_SET)
 	{
