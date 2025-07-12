@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 10:44:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/11 16:23:22 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 12:50:38 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	overseer(t_data *data)
 		check_death(data);
 		if (data->flag_stop == true)
 			break ;
+		usleep(DELAY_LOOP);
 	}
 }
 
@@ -36,7 +37,7 @@ static void	check_death(t_data *data)
 		{
 			data->flag_stop = true;
 			usleep(DELAY_MSG_DIED);
-			output_msg(&(data->philos[i]), MSG_DIED);
+			output_msg_death(&(data->philos[i]), MSG_DIED);
 			return ;
 		}
 		i++;

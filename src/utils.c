@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 18:20:05 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/11 16:23:31 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 12:52:19 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,20 @@ void	assign_forks(t_data *data)
 
 void	output_msg(t_philo *philo, const char *s)
 {
+	if (philo->data->flag_stop != true)
+	{
+		pthread_mutex_lock(&(philo->data->print));
+		printf("%ld %zu %s\n",
+			get_time_diff(philo->data->time_start), philo->id, s);
+		pthread_mutex_unlock(&(philo->data->print));
+	}
+}
+
+void	output_msg_death(t_philo *philo, const char *s)
+{
 	pthread_mutex_lock(&(philo->data->print));
-	printf("%ld %zu %s", get_time_diff(philo->data->time_start), philo->id, s);
+	printf("%ld %zu %s\n",
+		get_time_diff(philo->data->time_start), philo->id, s);
 	pthread_mutex_unlock(&(philo->data->print));
 }
 

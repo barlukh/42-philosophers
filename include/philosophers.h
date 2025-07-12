@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/11 13:53:41 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 12:50:04 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,22 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
-# define MSG_INV_ARG "Invalid arguments\n"
-# define MSG_ERR_MEM "Error allocating memory\n"
-# define MSG_ERR_INIT "Error initializing mutex objects\n"
-# define MSG_ERR_CREATE "Error creating threads\n"
-# define MSG_ERR_JOIN "Error joining threads\n"
+# define MSG_INV_ARG "Invalid arguments"
+# define MSG_ERR_MEM "Error allocating memory"
+# define MSG_ERR_INIT "Error initializing mutex objects"
+# define MSG_ERR_CREATE "Error creating threads"
+# define MSG_ERR_JOIN "Error joining threads"
 
-# define MSG_FORK "has taken a fork\n"
-# define MSG_EAT "is eating\n"
-# define MSG_SLEEP "is sleeping\n"
-# define MSG_THINK "is thinking\n"
-# define MSG_DIED "died\n"
+# define MSG_FORK "has taken a fork"
+# define MSG_EAT "is eating"
+# define MSG_SLEEP "is sleeping"
+# define MSG_THINK "is thinking"
+# define MSG_DIED "died"
 
 # define CNVRT 1000
 
-# define DELAY_START 250
-# define DELAY_MSG_DIED 1000
+# define DELAY_LOOP 100
+# define DELAY_MSG_DIED 2500
 # define SLEEP_CHUNK 1000
 
 # define SUCCESS 0
@@ -78,30 +78,30 @@ typedef struct s_philo	t_philo;
  * @param flag_error Flag singaling an error.
  * @param flag_stop Flag signaling a stop of the simulation.
  * @param philos_full Counter tracking how many philosophers are full.
+ * @param time_start Starting time of the simulation.
  * @param forks_created Number of successfully created forks.
  * @param philos_created Number of successfully created philosophers.
- * @param time_start Starting time of the simulation.
  * @param print Mutex object for printf() function.
  * @param forks Array of fork mutex objects.
  * @param philos Array of philosophers and their attributes.
  */
 typedef struct s_data
 {
-	int				philos_count;
-	int				tt_die;
-	int				tt_eat;
-	int				tt_sleep;
-	int				must_eat;
-	int				tt_think;
-	atomic_int		flag_error;
-	atomic_int		flag_stop;
-	atomic_int		philos_full;
-	size_t			forks_created;
-	size_t			philos_created;
-	uint64_t		time_start;
-	pthread_mutex_t	print;
-	pthread_mutex_t	*forks;
-	t_philo			*philos;
+	int						philos_count;
+	int						tt_die;
+	int						tt_eat;
+	int						tt_sleep;
+	int						must_eat;
+	int						tt_think;
+	atomic_int				flag_error;
+	atomic_int				flag_stop;
+	atomic_int				philos_full;
+	atomic_uint_fast64_t	time_start;
+	size_t					forks_created;
+	size_t					philos_created;
+	pthread_mutex_t			print;
+	pthread_mutex_t			*forks;
+	t_philo					*philos;
 }	t_data;
 
 /**
@@ -177,6 +177,14 @@ int			mtx_init(t_data *data);
  * @return None.
  */
 void		output_msg(t_philo *philo, const char *s);
+
+/**
+ * @brief Prints a death message bypassing the flag check.
+ * @param philo Unique attributes of each philosopher.
+ * @param s Message to output.
+ * @return None.
+ */
+void		output_msg_death(t_philo *philo, const char *s);
 
 /**
  * @brief Monitors the death state of each philosopher.

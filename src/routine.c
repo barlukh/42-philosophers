@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/11 17:07:57 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 12:30:11 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ void	*philo_routine(void *arg)
 	{
 		if (philo->data->flag_error == NO_ERROR)
 			break ;
+		else if (philo->data->flag_error == ERROR)
+			return (NULL);
+		usleep(DELAY_LOOP);
 	}
 	if (philo->data->philos_count == 1)
 		return (routine_one(philo));
