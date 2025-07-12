@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/12 12:50:04 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 14:25:47 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,9 @@
 # define NO_ERROR 1
 
 # define ERR_MEM 1
-# define ERR_MTX 2
-# define CLEAN_ALL 3
+# define ERR_MTX_PRINT 2
+# define ERR_MTX_MEAL 3
+# define CLEAN_ALL 4
 
 //------------------------------------------------------------------------------
 // Type Definitions
@@ -100,6 +101,7 @@ typedef struct s_data
 	size_t					forks_created;
 	size_t					philos_created;
 	pthread_mutex_t			print;
+	pthread_mutex_t			meal;
 	pthread_mutex_t			*forks;
 	t_philo					*philos;
 }	t_data;

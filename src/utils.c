@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/05 18:20:05 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/12 12:52:19 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 15:56:13 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ void	assign_forks(t_data *data)
 
 void	output_msg(t_philo *philo, const char *s)
 {
+	pthread_mutex_lock(&(philo->data->print));
 	if (philo->data->flag_stop != true)
 	{
-		pthread_mutex_lock(&(philo->data->print));
 		printf("%ld %zu %s\n",
 			get_time_diff(philo->data->time_start), philo->id, s);
-		pthread_mutex_unlock(&(philo->data->print));
 	}
+	pthread_mutex_unlock(&(philo->data->print));
 }
 
 void	output_msg_death(t_philo *philo, const char *s)
@@ -60,7 +60,7 @@ void	cleanup(t_data *data, int flag)
 
 	if (flag == CLEAN_ALL)
 	{
-		pthread_mutex_destroy(&(data->print));
+		pthread_mutex_destroy(&(data->meal));
 		i = 0;
 		while (i < data->forks_created)
 		{
@@ -68,8 +68,11 @@ void	cleanup(t_data *data, int flag)
 			i++;
 		}
 	}
-	if (flag == ERR_MTX || flag == CLEAN_ALL)
+	if (flag == ERR_MTX_MEAL || flag == CLEAN_ALL)
+		pthread_mutex_destroy(&(data->print));
+	if (flag == ERR_MTX_PRINT || flag == ERR_MTX_MEAL || flag == CLEAN_ALL)
 		free(data->forks);
-	if ((flag == ERR_MEM || flag == ERR_MTX || flag == CLEAN_ALL))
+	if ((flag == ERR_MEM || flag == ERR_MTX_PRINT || flag == ERR_MTX_MEAL
+			|| flag == CLEAN_ALL))
 		free(data->philos);
 }

@@ -6,11 +6,13 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 12:57:16 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/12 11:56:14 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 14:21:44 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
+
+static int	mtx_init_forks(t_data *data);
 
 int	mem_alloc(t_data *data)
 {
@@ -32,14 +34,27 @@ int	mem_alloc(t_data *data)
 
 int	mtx_init(t_data *data)
 {
-	size_t	i;
-
 	if (pthread_mutex_init(&(data->print), NULL) != SUCCESS)
 	{
-		cleanup(data, ERR_MTX);
+		cleanup(data, ERR_MTX_PRINT);
 		printf(MSG_ERR_INIT);
 		return (FAILURE);
 	}
+	if (pthread_mutex_init(&(data->meal), NULL) != SUCCESS)
+	{
+		cleanup(data, ERR_MTX_MEAL);
+		printf(MSG_ERR_INIT);
+		return (FAILURE);
+	}
+	if (mtx_init_forks(data) != SUCCESS)
+		return (FAILURE);
+	return (SUCCESS);
+}
+
+static int	mtx_init_forks(t_data *data)
+{
+	size_t	i;
+
 	i = 0;
 	while (i < (size_t)data->philos_count)
 	{

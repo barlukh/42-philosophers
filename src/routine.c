@@ -6,16 +6,16 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/12 12:30:11 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/12 15:56:03 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philosophers.h"
 
 static void	*routine_one(t_philo *philo);
+static void	routine_delay(t_philo *philo);
 static void	routine_eat(t_philo *philo);
-static void	routine_sleep(t_philo *philo);
-static void	routine_think(t_philo *philo);
+static void	routine_sleep_think(t_philo *philo);
 
 void	*philo_routine(void *arg)
 {
@@ -32,16 +32,13 @@ void	*philo_routine(void *arg)
 	}
 	if (philo->data->philos_count == 1)
 		return (routine_one(philo));
-	if (philo->id % 2 != 0)
-	{
-		output_msg(philo, MSG_THINK);
-		usleep(philo->data->tt_eat * CNVRT);
-	}
+	routine_delay(philo);
 	while (true)
 	{
 		routine_eat(philo);
-		routine_sleep(philo);
-		routine_think(philo);
+		if (philo->data->flag_stop == true)
+			break ;
+		routine_sleep_think(philo);
 		if (philo->data->flag_stop == true)
 			break ;
 	}
@@ -57,6 +54,16 @@ static void	*routine_one(t_philo *philo)
 	return (NULL);
 }
 
+// Delays the start of all odd philosophers.
+static void	routine_delay(t_philo *philo)
+{
+	if (philo->id % 2 != 0)
+	{
+		output_msg(philo, MSG_THINK);
+		usleep(philo->data->tt_eat * CNVRT);
+	}
+}
+
 // Runs the eating routine.
 static void	routine_eat(t_philo *philo)
 {
@@ -64,8 +71,12 @@ static void	routine_eat(t_philo *philo)
 	output_msg(philo, MSG_FORK);
 	pthread_mutex_lock(philo->fork[1]);
 	output_msg(philo, MSG_FORK);
-	output_msg(philo, MSG_EAT);
+	pthread_mutex_lock(&(philo->data->meal));
 	philo->last_meal = get_time();
+	pthread_mutex_unlock(&(philo->data->meal));
+	if (philo->data->flag_stop == true)
+		return ;
+	output_msg(philo, MSG_EAT);
 	safe_sleep(philo, philo->data->tt_eat);
 	if (philo->data->must_eat != NOT_SET)
 	{
@@ -81,16 +92,13 @@ static void	routine_eat(t_philo *philo)
 	pthread_mutex_unlock(philo->fork[1]);
 }
 
-// Runs the sleeping routine.
-static void	routine_sleep(t_philo *philo)
+// Runs the sleeping and thinking routine.
+static void	routine_sleep_think(t_philo *philo)
 {
 	output_msg(philo, MSG_SLEEP);
 	safe_sleep(philo, philo->data->tt_sleep);
-}
-
-// Runs the thinking routine.
-static void	routine_think(t_philo *philo)
-{
+	if (philo->data->flag_stop == true)
+		return ;
 	output_msg(philo, MSG_THINK);
 	if (philo->data->philos_count % 2 != 0)
 		safe_sleep(philo, philo->data->tt_think);
