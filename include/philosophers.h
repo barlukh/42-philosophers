@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 14:53:59 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/13 11:39:51 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/13 11:55:13 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@
 // Macro Definitions
 //------------------------------------------------------------------------------
 
-# define MSG_INV_ARG "Invalid arguments"
-# define MSG_ERR_MEM "Error allocating memory"
-# define MSG_ERR_INIT "Error initializing mutex objects"
-# define MSG_ERR_CREATE "Error creating threads"
-# define MSG_ERR_JOIN "Error joining threads"
+# define MSG_INV_ARG "Invalid arguments\n"
+# define MSG_ERR_MEM "Error allocating memory\n"
+# define MSG_ERR_INIT "Error initializing mutex objects\n"
+# define MSG_ERR_CREATE "Error creating threads\n"
+# define MSG_ERR_JOIN "Error joining threads\n"
 
 # define MSG_FORK "has taken a fork"
 # define MSG_EAT "is eating"
