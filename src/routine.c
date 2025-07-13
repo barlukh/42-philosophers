@@ -6,7 +6,7 @@
 /*   By: bgazur <bgazur@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:41:22 by bgazur            #+#    #+#             */
-/*   Updated: 2025/07/12 15:56:03 by bgazur           ###   ########.fr       */
+/*   Updated: 2025/07/13 11:46:09 by bgazur           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static void	*routine_one(t_philo *philo)
 	pthread_mutex_lock(philo->fork[0]);
 	output_msg(philo, MSG_FORK);
 	usleep(philo->data->tt_die * CNVRT);
+	pthread_mutex_unlock(philo->fork[0]);
 	return (NULL);
 }
 
@@ -74,18 +75,19 @@ static void	routine_eat(t_philo *philo)
 	pthread_mutex_lock(&(philo->data->meal));
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(&(philo->data->meal));
-	if (philo->data->flag_stop == true)
-		return ;
-	output_msg(philo, MSG_EAT);
-	safe_sleep(philo, philo->data->tt_eat);
-	if (philo->data->must_eat != NOT_SET)
+	if (philo->data->flag_stop != true)
 	{
-		philo->times_eaten++;
-		if (philo->times_eaten == (size_t)philo->data->must_eat)
+		output_msg(philo, MSG_EAT);
+		safe_sleep(philo, philo->data->tt_eat);
+		if (philo->data->must_eat != NOT_SET)
 		{
-			philo->data->philos_full++;
-			if (philo->data->philos_full == philo->data->philos_count)
-				philo->data->flag_stop = true;
+			philo->times_eaten++;
+			if (philo->times_eaten == (size_t)philo->data->must_eat)
+			{
+				philo->data->philos_full++;
+				if (philo->data->philos_full == philo->data->philos_count)
+					philo->data->flag_stop = true;
+			}
 		}
 	}
 	pthread_mutex_unlock(philo->fork[0]);
